@@ -4,9 +4,11 @@ import javax.swing.*;
 
 public class GameWindow {
     private final JFrame jframe;
+    private final Game game;
     private final GamePanel gamePanel;
 
-    public GameWindow(GamePanel gamePanel) {
+    public GameWindow(Game game, GamePanel gamePanel) {
+        this.game = game;
         this.gamePanel = gamePanel;
         this.jframe = new JFrame();
 

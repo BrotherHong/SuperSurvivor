@@ -1,20 +1,23 @@
 package main;
 
 import api.Drawable;
+import entity.enemy.Enemy;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class GamePanel extends JPanel {
+    private final Game game;
+    private final List<Drawable> itemsToRender;
+    private Set<Enemy> enemies;
 
-    private final List<Drawable> itemToDraw;
-
-    public GamePanel() {
+    public GamePanel(Game game) {
+        this.game = game;
+        itemsToRender = new ArrayList<>();
         setPanelSize();
-
-        itemToDraw = new ArrayList<>();
     }
 
     private void setPanelSize() {
@@ -24,13 +27,24 @@ public class GamePanel extends JPanel {
         setMaximumSize(size);
     }
 
-    public void draw(Drawable item) {
-        itemToDraw.add(item);
+    public void renderItem(Drawable item) {
+        itemsToRender.add(item);
+    }
+
+    public void renderEnemies(Set<Enemy> enemies) {
+        this.enemies = enemies;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        itemToDraw.forEach(item -> item.draw(g));
+        drawFPSAndUPS(g);
+        itemsToRender.forEach(item -> item.draw(g));
+        enemies.forEach(enemy -> enemy.draw(g));
+    }
+
+    private void drawFPSAndUPS(Graphics g) {
+        String str = String.format("FPS: %d | UPS: %d", game.getFPS(), game.getUPS());
+        g.drawString(str, 0, 10);
     }
 }

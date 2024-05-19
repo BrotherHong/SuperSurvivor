@@ -12,18 +12,20 @@ public class RotatedSword extends Weapon {
     private final float radius = 100;
     private final float degreePerFrame = 3;
     private BufferedImage image = null;
-    private final int imageWidth = 100;
-    private final int imageHeight = 100;
 
     private int degree = 0;
 
     public RotatedSword(int attackPower) {
-        super(attackPower);
+        super(100, 100, attackPower);
+        loadImage();
+    }
+
+    private void loadImage() {
         Image originImage;
         try {
             originImage = ImageIO.read(new FileInputStream("resources/sword_900.png"));
-            image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
-            image.getGraphics().drawImage(originImage, 0, 0, imageWidth, imageHeight, null);
+            image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            image.getGraphics().drawImage(originImage, 0, 0, width, height, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,16 +37,17 @@ public class RotatedSword extends Weapon {
         float offsetX = (float) (radius * Math.cos(Math.toRadians(degree)));
         float offsetY = (float) (radius * Math.sin(Math.toRadians(degree)));
 
-        int swordX = imageWidth/2;
-        int swordY = imageHeight/2;
+        x = owner.getX() + offsetX;
+        y = owner.getY() + offsetY;
 
-        int drawX = (int) (owner.getX() + offsetX - swordX);
-        int drawY = (int) (owner.getY() + offsetY - swordY);
+        int drawX = (int) (x - width/2f);
+        int drawY = (int) (y - height/2f);
 
         AffineTransform transform = AffineTransform.getTranslateInstance(drawX, drawY);
-        transform.rotate(Math.toRadians(degree), swordX, swordY);
+        transform.rotate(Math.toRadians(degree), width/2f, height/2f);
 
         ((Graphics2D)g).drawImage(image, transform, null);
+        g.drawRect(drawX, drawY, width, height);
 
         // rotate (update)
         degree += degreePerFrame;

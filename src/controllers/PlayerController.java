@@ -1,6 +1,6 @@
 package controllers;
 
-import objects.Player;
+import entity.Player;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -15,7 +15,6 @@ public class PlayerController implements KeyListener {
 
     public PlayerController(Player player) {
         this.player = player;
-
     }
 
     public void movePlayer() {
